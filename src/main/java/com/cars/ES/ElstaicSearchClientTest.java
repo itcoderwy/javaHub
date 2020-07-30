@@ -1,17 +1,21 @@
 package com.cars.ES;
 
+import com.cars.domian.Article;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 /**
  * @Description es服务器端测试
@@ -108,6 +112,7 @@ public class ElstaicSearchClientTest {
         }
     }
 
+    //向es索引库中添加文档
     @Test
     public void addDocument() throws Exception{
         XContentBuilder xContentBuilder = new XContentFactory().jsonBuilder()
@@ -121,6 +126,33 @@ public class ElstaicSearchClientTest {
                 .get();
         client.close();
     }
+
+    //删除es索引库中得文档
+    @Test
+    public void del(){
+        client.prepareDelete("index_hello","article","2").get();
+        client.close();
+    }
+
+    //用java对象得方式添加数据到es索引库
+    @Test
+    public void setDoc() throws Exception {
+        //1,先创建java对象 并赋值
+        Article article = new Article();
+        article.setId(3);
+        article.setTitle("很短，自己看看，爱信不信");
+        article.setContent("好好干好手头的事情，不要意气用事，好好做好交接工作");
+        //2,将对象中得值用jackson转换成json
+        ObjectMapper mapper = new ObjectMapper();
+        String articleJson = mapper.writeValueAsString(article);
+
+        client.prepareIndex("index_hello","article","3")
+                .setSource(articleJson, XContentType.JSON)
+                .get();
+        client.close();
+
+    }
+
 
 
 }
