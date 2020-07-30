@@ -35,7 +35,7 @@ public class ElstaicSearchClientTest {
             client.admin().indices().prepareCreate("index_hello")
                     //这个get是执行操作  之前步骤都是在设置
                     .get();
-            //关闭client对象
+            //4,关闭client对象
             client.close();
         } catch (Exception e) {
             log.error(e.getMessage());
