@@ -155,6 +155,19 @@ public class ElstaicSearchClientTest {
 
     @Test
     public void edit() throws Exception{
+        //1,先创建java对象 并赋值
+        Article article = new Article();
+        article.setId(3);
+        article.setTitle("3很短，自己看看，爱信不信");
+        article.setContent("3好好干好手头的事情，不要意气用事，好好做好交接工作");
+        //2,将对象中得值用jackson转换成json
+        ObjectMapper mapper = new ObjectMapper();
+        String articleJson = mapper.writeValueAsString(article);
+
+        client.prepareIndex("index_hello","article","3")
+                .setSource(articleJson, XContentType.JSON)
+                .get();
+        client.close();
 
     }
 
