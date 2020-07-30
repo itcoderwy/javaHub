@@ -25,7 +25,7 @@ public class ElstaicSearchClientTest {
 
         log.info("开始创建es索引");
         try {
-            //1,创建一个settings  主要配置es集群信息
+            //1,创建一个settings  主要配置es集群信息 k:集群名称  value:集群名称
             Settings esSettings = Settings.builder().put("cluster.name", "my_esLearn").build();
             //2,创建客户端Client对象
             TransportClient client = new PreBuiltTransportClient(esSettings);
