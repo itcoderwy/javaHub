@@ -30,7 +30,7 @@ public class OutputStreamDemo1 {
        /* FileOutputStream fos1 = new FileOutputStream(new File("C:\\Users\\Wy005\\Desktop\\IO流练习\\b.txt"));
         fos1.write(97);
         fos1.write(98);
-        fos1.write(99);
+        fos1.write(96);
         fos.close();
         */
 
