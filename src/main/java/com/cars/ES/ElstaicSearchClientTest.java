@@ -4,18 +4,26 @@ import com.cars.domian.Article;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.search.MultiMatchQuery;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @Description es服务器端测试
@@ -168,8 +176,56 @@ public class ElstaicSearchClientTest {
                 .setSource(articleJson, XContentType.JSON)
                 .get();
         client.close();
-
     }
 
+    //根据id查询
+    @Test
+    public void getDocById() throws Exception{
+        QueryBuilder queryBuilder = QueryBuilders.idsQuery().addIds("1","3");
+        this.search(queryBuilder);
+        /*SearchResponse searchResponse = client.prepareSearch("index_hello").setTypes("article").setQuery(queryBuilder).get();
+        SearchHits searchHits = searchResponse.getHits();
+        System.out.println("查询结果得总记录数:"+searchHits.getTotalHits());
+        Iterator<SearchHit> iterator =  searchHits.iterator();
+        while (iterator.hasNext()){
+            SearchHit searchHit = iterator.next();
+            Map<String, Object> source = searchHit.getSourceAsMap();
+            System.out.println(source.get("id"));
+            System.out.println(source.get("title"));
+            System.out.println(source.get("content"));
+        }
+     client.close();*/
+    }
 
+    //抽取查询方法
+    private void search(QueryBuilder queryBuilder)throws Exception{
+        SearchResponse searchResponse = client.prepareSearch("index_hello").setTypes("article").setQuery(queryBuilder).get();
+        SearchHits searchHits = searchResponse.getHits();
+        System.out.println("查询结果得总记录数:"+searchHits.getTotalHits());
+        Iterator<SearchHit> iterator =  searchHits.iterator();
+        while (iterator.hasNext()){
+            SearchHit searchHit = iterator.next();
+            Map<String, Object> source = searchHit.getSourceAsMap();
+            System.out.println(source.get("id"));
+            System.out.println(source.get("title"));
+            System.out.println(source.get("content"));
+        }
+        client.close();
+    }
+
+    //根据term查询
+    @Test
+    public void searchByTerm() throws Exception{
+        //参数1:要搜索得字段   参数2:要搜索得关键词
+      QueryBuilder queryBuilder = QueryBuilders.termQuery("title", "你好");
+      this.search(queryBuilder);
+    }
+
+    @Test
+    public void queryString() throws Exception{
+        //是对搜索得语句先分词再去查询
+        //defaultField("title")意思是可以指定搜索域(字段)
+        QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("你要添加").defaultField("content");
+        this.search(queryBuilder);
+    }
 }
