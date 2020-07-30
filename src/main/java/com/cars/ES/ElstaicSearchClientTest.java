@@ -1,12 +1,14 @@
 package com.cars.ES;
 
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
@@ -19,6 +21,20 @@ import java.net.InetAddress;
  **/
 @Slf4j
 public class ElstaicSearchClientTest {
+
+    private TransportClient client;
+
+    //提取方法
+    @Before
+    public void init() throws Exception{
+        //1,创建一个settings  主要配置es集群信息 k:集群名称  value:集群名称
+        Settings esSettings = Settings.builder().put("cluster.name", "my_esLearn").build();
+        //2,创建客户端Client对象
+        client = new PreBuiltTransportClient(esSettings);
+        //为了报证集群宕机可以 最后设置三个节点  这里测试暂时用一个
+        client.addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"),9300));
+    }
+
 
     @Test
     public void creatIndex() throws Exception {
@@ -92,6 +108,19 @@ public class ElstaicSearchClientTest {
         }
     }
 
+    @Test
+    public void addDocument() throws Exception{
+        XContentBuilder xContentBuilder = new XContentFactory().jsonBuilder()
+                .startObject()
+                   .field("id",2)
+                   .field("title","2你好es!")
+                   .field("content","2向es索引中添加文档")
+                .endObject();
+        client.prepareIndex("index_hello","article","2")
+                .setSource(xContentBuilder)
+                .get();
+        client.close();
+    }
 
 
 }
