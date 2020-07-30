@@ -153,6 +153,10 @@ public class ElstaicSearchClientTest {
 
     }
 
+    @Test
+    public void edit() throws Exception{
+
+    }
 
 
 }
