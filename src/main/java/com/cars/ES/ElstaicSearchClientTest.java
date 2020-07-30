@@ -138,7 +138,7 @@ public class ElstaicSearchClientTest {
     //删除es索引库中得文档
     @Test
     public void del(){
-        client.prepareDelete("index_hello","article","2").get();
+        client.prepareDelete("index_hello","article","article.getId()").get();
         client.close();
     }
 
@@ -199,7 +199,14 @@ public class ElstaicSearchClientTest {
 
     //抽取查询方法
     private void search(QueryBuilder queryBuilder)throws Exception{
-        SearchResponse searchResponse = client.prepareSearch("index_hello").setTypes("article").setQuery(queryBuilder).get();
+        SearchResponse searchResponse = client.prepareSearch("index_hello")
+                .setTypes("article")
+                .setQuery(queryBuilder)
+                //设置分页信息开始点
+                .setFrom(0)
+                //设置每页条数
+                .setSize(3)
+                .get();
         SearchHits searchHits = searchResponse.getHits();
         System.out.println("查询结果得总记录数:"+searchHits.getTotalHits());
         Iterator<SearchHit> iterator =  searchHits.iterator();
@@ -225,7 +232,35 @@ public class ElstaicSearchClientTest {
     public void queryString() throws Exception{
         //是对搜索得语句先分词再去查询
         //defaultField("title")意思是可以指定搜索域(字段)
-        QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("你要添加").defaultField("content");
+        QueryBuilder queryBuilder = QueryBuilders.queryStringQuery("交接工作").defaultField("content");
         this.search(queryBuilder);
     }
+
+    //批量添加数据
+    @Test
+    public void addDoc1()throws Exception{
+        for (int i = 1; i < 101 ; i++) {
+            //1,先创建java对象 并赋值
+            Article article = new Article();
+            article.setId(i);
+            article.setTitle(i+"很短，自己看看，爱信不信");
+            article.setContent(i+"好好干好手头的事情，不要意气用事，好好做好交接工作");
+            //2,将对象中得值用jackson转换成json
+            ObjectMapper mapper = new ObjectMapper();
+            String articleJson = mapper.writeValueAsString(article);
+
+            client.prepareIndex()
+                    .setIndex("index_hello")
+                    .setType("article")
+                    .setId(i+"")
+                    .setSource(articleJson, XContentType.JSON)
+                    .get();
+        }
+        client.close();
+    }
+
+    //分页查询
+
+
+
 }
