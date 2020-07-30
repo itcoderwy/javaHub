@@ -23,13 +23,20 @@ public class OutputStreamDemo1 {
          * 2,调用fileoutputStream得write方法,把数据写入文件中
          * 3,流使用完了要释放资源
          */
-        FileOutputStream fos = new FileOutputStream("C:\\Users\\Wy005\\Desktop\\IO流练习\\aa.txt");
+       /* FileOutputStream fos = new FileOutputStream("C:\\Users\\Wy005\\Desktop\\IO流练习\\aa.txt");
         fos.write(97);
-        fos.close();
+        fos.close();*/
 
-        FileOutputStream fos1 = new FileOutputStream(new File("C:\\Users\\Wy005\\Desktop\\IO流练习\\b.txt"));
+       /* FileOutputStream fos1 = new FileOutputStream(new File("C:\\Users\\Wy005\\Desktop\\IO流练习\\b.txt"));
         fos1.write(97);
         fos.close();
+        */
+
+        FileOutputStream fos2 = new FileOutputStream("C:\\Users\\Wy005\\Desktop\\IO流练习\\aa.txt",true);
+        //换行符号
+        fos2.write("\r\n".getBytes());
+        fos2.write("helloIO".getBytes());
+        fos2.close();
     }
 
 
