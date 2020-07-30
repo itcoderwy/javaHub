@@ -1,6 +1,5 @@
 package com.cars.ES;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -9,7 +8,6 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Test;
 
 import java.net.InetAddress;
-
 
 /**
  * @Description es服务器端测试
