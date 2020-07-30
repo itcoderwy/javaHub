@@ -31,6 +31,7 @@ public class OutputStreamDemo1 {
         fos1.write(97);
         fos1.write(98);
         fos1.write(96);
+        fos1.write(100);
         fos.close();
         */
 
