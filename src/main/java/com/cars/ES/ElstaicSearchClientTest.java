@@ -1,7 +1,7 @@
 package com.cars.ES;
 
 import com.cars.domian.Article;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchResponse;
@@ -13,7 +13,7 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.search.MultiMatchQuery;
+
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -258,8 +258,6 @@ public class ElstaicSearchClientTest {
         }
         client.close();
     }
-
-    //分页查询
 
 
 

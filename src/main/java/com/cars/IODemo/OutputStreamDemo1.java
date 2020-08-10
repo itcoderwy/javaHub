@@ -1,8 +1,6 @@
 package com.cars.IODemo;
 
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * @Description 字节输出流
