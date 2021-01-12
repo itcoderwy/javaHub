@@ -3,12 +3,8 @@ package com.cars.learnDemo;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import static java.sql.DriverManager.println;
 
 /**
  * @Description 定时任务得实现
