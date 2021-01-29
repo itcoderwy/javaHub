@@ -6,7 +6,7 @@ package test3;
  * @Date 2021/1/29 9:00
  * @Version 1.0
  **/
-public class bubble {
+public class gennerateArray {
     public static void main(String[] args) {
         int []arr=gennerateArray(10, 100);
         for (int i = 0; i < arr.length; i++) {
